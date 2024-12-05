@@ -1,0 +1,2 @@
+add_subdirectory(InterProcessCommunication)
+add_subdirectory(NodeHandling)

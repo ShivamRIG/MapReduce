@@ -1,0 +1,4 @@
+add_library(InterProcessCommunication STATIC
+RemoteProcedureCalls.cpp
+)
+target_include_directories(InterProcessCommunication PUBLIC ${PROJECT_SOURCE_DIR}/DistributedSystemsHandling/InterProcessCommunication)
