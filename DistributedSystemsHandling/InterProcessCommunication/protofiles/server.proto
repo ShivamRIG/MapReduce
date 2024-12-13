@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message someMessage{
+ float name = 1; //Field 1
+}
+message someOtherMessage{
+ float data = 1; //Field 1
+}
+service someService{
+ rpc  makeSomeRpcCall(someMessage) returns (someOtherMessage);
+}
