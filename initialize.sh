@@ -4,7 +4,7 @@ then
  echo "grpc already installed"
 else 
  echo "installing grpc"
- ./gRPCinstall.sh
+ sudo ./gRPCinstall.sh
 fi 
 cd DistributedSystemsHandling/InterProcessCommunication/protofiles/
 ./generate_cpp.sh

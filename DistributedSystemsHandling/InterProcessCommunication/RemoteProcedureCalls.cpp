@@ -1,8 +1,24 @@
 // #include <algorithm>
-#include <grpcpp/grpcpp.h>
+#include "RemoteProcedureCalls.h"
+#include <iostream>
+#include "gRPC_Communication.grpc.pb.h"
+#include "gRPC_Communication.pb.h"
 
-namespace communication{
-int add(int a,int b){
- return a+b;
+// Constructor
+makeCall::makeCall() {
+    std::cout << "makeCall constructor called\n";
 }
+
+// Destructor
+makeCall::~makeCall() {
+    std::cout << "makeCall destructor called\n";
+}
+
+// Method Implementation
+::grpc::Status makeCall::makeSomeRpcCall(::grpc::ServerContext* context, 
+                                         const ::someMessage* request, 
+                                         ::someOtherMessage* response) {
+    std::cout << "RPC method called\n";
+    response->set_data(request->name());
+    return grpc::Status::OK;
 }

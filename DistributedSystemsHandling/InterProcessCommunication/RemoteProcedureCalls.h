@@ -1,11 +1,20 @@
 #ifndef RemoteProcedureCalls
 
 #define RemoteProcedureCalls
-#include <bits/stdc++.h>
+#include <iostream>
+#include "gRPC_Communication.grpc.pb.h"
+#include "gRPC_Communication.pb.h"
 
-namespace communication{
-   int add(int a,int b); 
-}
+// Class Declaration
+class makeCall : public someService::Service {
+public:
+    makeCall();
+    ~makeCall() override;
+
+    ::grpc::Status makeSomeRpcCall(::grpc::ServerContext* context, 
+                                   const ::someMessage* request, 
+                                   ::someOtherMessage* response) override;
+};
 
 
 #endif
