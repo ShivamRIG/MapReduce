@@ -9,5 +9,5 @@ add_executable(Node main.cpp)
 
 
 target_link_libraries(Node
-    InterProcessCommunication NodeHandling
+    InterNodeCommunication NodeHandling
 )
