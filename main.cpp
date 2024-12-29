@@ -29,23 +29,24 @@ int main(int argc, char** argv) {
  // std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
  // server->Wait();
  std::string nodeType=argv[1];
- std::cout<<"here\n";
- std::cout<<nodeType<<'\n';
+ // std::cout<<"here\n";
+ // std::cout<<nodeType<<'\n';
  if(nodeType=="s" or nodeType=="S"){
   std::cout<<"here\n";
-  CommunicationServiceServer server;
+  std::string ga="ga";
+  CommunicationServiceServer server(ga);
   grpc::ServerBuilder builder;
   builder.AddListeningPort("0.0.0.0:50053",grpc::InsecureServerCredentials());
   builder.RegisterService(&server);
   std::unique_ptr<grpc::Server> sserver(builder.BuildAndStart());
   sserver->Wait();
  }
- else {
-  std::cout<<"here_\n";
-  CommunicationServiceClient client(grpc::CreateChannel("localhost:50053",
-   grpc::InsecureChannelCredentials()));
-  client.getFile(0,0,0,0);
- } 
+ // else {
+ //  std::cout<<"here_\n";
+ //  // CommunicationServiceClient client(grpc::CreateChannel("localhost:50053",
+ //   // grpc::InsecureChannelCredentials()));
+ //  // client.getFile(0,0,0,0);
+ // } 
 
 
 }

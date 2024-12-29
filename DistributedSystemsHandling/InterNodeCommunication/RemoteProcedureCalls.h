@@ -1,5 +1,4 @@
 #ifndef RemoteProcedureCalls
-
 #define RemoteProcedureCalls
 #include <iostream>
 #include "gRPC_Communication.grpc.pb.h"
@@ -10,24 +9,28 @@
 #include <vector>
 
 // const std::string folderPath;
+//Server
 class CommunicationServiceServer : public CommunicationService :: Service{
  private:
-  static const int data_transfer_rate=5;// In kilobytes
+  static const int data_transfer_rate=16;// In kilobytes
   std::string folderPath;
-
+  
  public:
-  CommunicationServiceServer();
+  CommunicationServiceServer(std::string &folderPath);
   ~CommunicationServiceServer() override;
   ::grpc::Status getFile(::grpc::ServerContext* context, const ::FileRequest* request, ::grpc::ServerWriter< ::FileChunk>* writer)override;
-    
+  void setFolderPath(std::string &folderpath);
 };
+
+//Client
 class CommunicationServiceClient {
  private:
-  std::unique_ptr<CommunicationService::Stub> stub_;
+  std::map<std::string,std::unique_ptr<CommunicationService::Stub>> stubs;
   std::string folderPath;
  public:
- CommunicationServiceClient(std::shared_ptr<grpc::Channel> channel); 
-
- void getFile(int64_t startFrom,int64_t keyl,int64_t keyh,int64_t fileNumber);
+  CommunicationServiceClient(std::string &folderPath);
+  void addStub(std::string ipPort); 
+  void setFolderPath(std::string &folderpath);
+  void getFile(int64_t startFrom,std::string fileName,std::string task,std::string,std::string extension,std::string ipPort);
 };
 #endif

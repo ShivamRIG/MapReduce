@@ -7,23 +7,27 @@
 #include <grpcpp/grpcpp.h>
 #include <memory>
 #include <vector>
+
+
+
+
+// Server Code
+
 // Constructor
-
-
-CommunicationServiceServer::CommunicationServiceServer() {
- // this->data_transfer_rate=dataTransferRate*1024;//In kilobytes/per write
- this->folderPath="/home/mahesh/temp_mapReduce/server/";
+CommunicationServiceServer::CommunicationServiceServer(std::string &folderPath) {
+ this->folderPath=folderPath;
 }
-// // Destructor
+// Destructor
 CommunicationServiceServer::~CommunicationServiceServer() {
 }
 grpc::Status CommunicationServiceServer::getFile(grpc::ServerContext* context, 
  const FileRequest* fileRequest,
  grpc::ServerWriter<FileChunk>* writer){
- int64_t keyl=fileRequest->keyl(),keyh=fileRequest->keyh(),startFrom=fileRequest->startfrom(),fileNumber=fileRequest->filenumber();
- std::string filePath=folderPath+std::to_string(keyl)+"_"+std::to_string(keyh)+"_"+std::to_string(fileNumber)+".txt";
+ std::string fileName=fileRequest->filename(),extension=fileRequest->extension(),task=fileRequest->task();
+ int64_t startFrom=fileRequest->startfrom();
+ std::string filePath=folderPath+task+"/"+fileName+extension;
  FileChunk chunk;
- char buffer[1024*(this->data_transfer_rate)];// there is some error when trying variable sized array(tried using vector)
+ char buffer[1024*(this->data_transfer_rate)];// there is some error when trying variable sized array(tried using vector), also this is a const value
  std::ifstream file(filePath,std::ios::binary);
  if (!file.is_open()) {
   std::cout<<filePath<<'\n';
@@ -36,28 +40,41 @@ grpc::Status CommunicationServiceServer::getFile(grpc::ServerContext* context,
   chunk.set_size(file.gcount());
   writer->Write(chunk);
   startFrom++;
-  
  }
  return grpc::Status::OK;
 }
-
-CommunicationServiceClient::CommunicationServiceClient(std::shared_ptr<::grpc::Channel> channel)
-: stub_(CommunicationService::NewStub(channel)) {
- this->folderPath="/home/mahesh/temp_mapReduce/client/";
+void CommunicationServiceServer::setFolderPath(std::string &folderpath){
+  this->folderPath=folderpath;
 }
-void CommunicationServiceClient::getFile(int64_t startFrom,int64_t keyl,int64_t keyh,int64_t fileNumber){
+
+
+
+
+//Client Code
+CommunicationServiceClient::CommunicationServiceClient(std::string &folderPath)
+{
+ this->folderPath=folderPath;
+}
+
+
+void CommunicationServiceClient::addStub(std::string ipPort){
+  (this->stubs)[ipPort]=CommunicationService::NewStub(grpc::CreateChannel(ipPort,
+   grpc::InsecureChannelCredentials()));
+}
+
+
+void CommunicationServiceClient::getFile(int64_t startFrom,std::string fileName,std::string task,std::string,std::string extension,std::string ipPort){
  FileRequest request;
  grpc::ClientContext context;
  FileChunk chunk;
- 
- request.set_filenumber(fileNumber);
- request.set_keyh(keyh);
- request.set_keyl(keyl);
+ request.set_filename(fileName);
+ request.set_task(task);
+ request.set_extension(extension);
  request.set_startfrom(startFrom);
- std::string filePath=folderPath+std::to_string(keyl)+"_"+std::to_string(keyh)+"_"+std::to_string(fileNumber)+".txt";
+ std::string filePath=folderPath+task+"/"+fileName+extension;
  std::cout<<filePath<<'\n';
  std::ofstream file(filePath, std::ios::out | std::ios::binary); 
- std::unique_ptr<grpc::ClientReader<FileChunk>> reader(stub_->getFile(&context,request));
+ std::unique_ptr<grpc::ClientReader<FileChunk>> reader(stubs[ipPort]->getFile(&context,request));
  while(reader->Read(&chunk)){
   file.write(chunk.data().data(),chunk.size());
  }
@@ -71,6 +88,13 @@ void CommunicationServiceClient::getFile(int64_t startFrom,int64_t keyl,int64_t 
     }
 
 }
+
+
+void CommunicationServiceClient::setFolderPath(std::string &folderpath){
+  this->folderPath=folderpath;
+}
+
+
 // // Method Implementation
 // ::grpc::Status makeCall::makeSomeRpcCall(::grpc::ServerContext* context, 
 //                                          const ::someMessage* request, 
