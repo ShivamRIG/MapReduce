@@ -119,10 +119,7 @@ This is an example of how to list things you need to use the software and how to
     ```sh
     git fetch upstream
     ```
-5) Create .env file and copy and fill out contents of .config file into .env file. Note the frontend hits backend on localhost/8002.
-Also, this project was developed on Linux so it might have inconsistencies on windows systems.
-6) This application has three components Backend, Database and frontend. Go to each folder and follow it's readme to complete all the installations and run the project. Make sure to setup the database first.
-
+5) Run initialize.sh to setup the repo.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
