@@ -1,0 +1,6 @@
+out*
+.vscode*
+temp
+Temp
+*.pb.*
+grpc*

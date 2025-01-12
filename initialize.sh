@@ -1,11 +1,3 @@
-
-if ( ls | grep -q grpc );
-then 
- echo "grpc already installed"
-else 
- echo "installing grpc"
- sudo ./gRPCinstall.sh
-fi 
 cd DistributedSystemsHandling/InterNodeCommunication/protofiles/
 ./generate_cpp.sh
 cd ../../../

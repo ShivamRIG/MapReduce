@@ -1,3 +1,5 @@
+# set(CMAKE_PREFIX_PATH "~/.local;~/grpc;${CMAKE_SOURCE_DIR}")
+
 find_package(Protobuf CONFIG REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
@@ -10,8 +12,8 @@ add_subdirectory(protofiles)
 add_library(InterNodeCommunication STATIC
 RemoteProcedureCalls.cpp
 )
-target_link_libraries(InterNodeCommunication gRPC::grpc++)
+# target_link_libraries(InterNodeCommunication )
 
-target_link_libraries(InterNodeCommunication gRPC_Communication_Lib)
+target_link_libraries(InterNodeCommunication gRPC_Communication_Lib gRPC::grpc++)
 
 target_include_directories(InterNodeCommunication PUBLIC ${PROJECT_SOURCE_DIR}/DistributedSystemsHandling/InterNodeCommunication)

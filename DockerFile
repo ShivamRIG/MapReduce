@@ -1,4 +1,0 @@
-FROM ubuntu:latest
-RUN export MY_INSTALL_DIR=$HOME/.local
-RUN mkdir -p $MY_INSTALL_DIR
-RUN sudo apt install -y cmake
