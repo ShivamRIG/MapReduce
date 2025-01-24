@@ -4,8 +4,14 @@
 export MY_INSTALL_DIR=$HOME/.local
 mkdir -p $MY_INSTALL_DIR
 export PATH="$MY_INSTALL_DIR/bin:$PATH"
-apt update && apt-get install -y build-essential git protobuf-compiler autoconf libtool pkg-config sudo wget
-wget -O cmake-linux.sh https://github.com/Kitware/CMake/releases/download/v3.30.3/cmake-3.30.3-linux-x86_64.sh
+git clone -b v1.56.0 --depth 1 https://github.com/grpc/grpc \
+    && cd grpc \
+    && git submodule update --init \
+    && mkdir -p cmake/build \
+    && cd cmake/build \
+    && cmake ../.. -DBUILD_SHARED_LIBS=ON \
+    && make -j$(nproc) \
+    && make install
 sh cmake-linux.sh -- --skip-license --prefix=$MY_INSTALL_DIR
 rm cmake-linux.sh
 git clone --recurse-submodules -b v1.66.0 --depth 1 --shallow-submodules https://github.com/grpc/grpc

@@ -1,0 +1,9 @@
+working on wsl - ubuntu 
++ all .sh are working 
+
+There are several files added 
+  .. SSL.sh / for genrating ssl CERTIFICATE and key for future security patch in server and client grpc communication 
+   ... server.crt  for server
+    ... server.key for client
+
+i am confuse between the server  clinet cpp files not just 
