@@ -110,19 +110,39 @@ This is an example of how to list things you need to use the software and how to
 
 1. Fork the Project
 2. In a seperate empty clone forked the repo
-    ```sh
+    ```bash
     git clone git@github.com:<YOUR-USERNAME>/MapReduce.git
     ```
 3. Set the official repository as your upstream to synchronize with the latest update in the this repository. Add the original repository as upstream 
-    ```sh
+    ```bash
     cd MapReduce
     git remote add upstream git@github.com:MaheshG11/MapReduce.git
     ```
 4. Synchronize latest commit with this repository before coding 
-    ```sh
+    ```bash
     git fetch upstream
     ```
-5) Run initialize.sh to setup the repo.
+5. Installation </br>a. For Windows: If you use windows you will have to work with docker or WSL.
+      ```bash
+      docker run -it map_reduce -w /project
+      ```
+      b. For Linux : Make sure cmake is not installed initially as we will use newer version of cmake installed through grpc
+      ```bash
+      sudo ./gRPCinstall.sh # installing grpc
+      sudo ./initialize.sh # compiling code
+      ```
+      #### NOTE: Compiled executable will be found in project_dir/out/build/
+6. Possible Errors </br>
+      a. For Linux: if during compilation you recieve <b>cmake not found</b>, try 
+      ```bash
+      export PATH="$HOME/.local/bin:$PATH"
+      ``` 
+      and then run the installation command.
+
+</br>
+
+    
+  
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
